@@ -73,7 +73,7 @@ function CreatorModal({ title, onClose, children }) {
     );
 }
 
-function CampaignFields({ campaign = {}, prefix }) {
+function CampaignFields({ campaign = {}, prefix, campaignImageUrl = "", onImageChange }) {
     return (
         <>
             <label className="creator-field creator-field--wide">
@@ -116,11 +116,7 @@ function CampaignFields({ campaign = {}, prefix }) {
                     <ImageUpload
                         label="Campaign image"
                         value={campaignImageUrl}
-                        onChange={(url) => {
-                            setCampaignImageUrl(url);
-                            const input = document.querySelector('input[name="imageUrl"]');
-                            if (input) input.value = url;
-                        }}
+                        onChange={onImageChange}
                     />
                     <input name="imageUrl" type="hidden" value={campaignImageUrl} />
                 </>
@@ -221,6 +217,7 @@ export default function CreatorDashboard({ section = "home", user }) {
             });
             setNotice("Campaign submitted for Admin approval.");
             setShowCampaignForm(false);
+            setCampaignImageUrl("");
             await loadDashboard();
         } catch (submitError) {
             setError(submitError instanceof Error ? submitError.message : "Unable to submit campaign.");
@@ -347,7 +344,11 @@ export default function CreatorDashboard({ section = "home", user }) {
                 <section className="creator-section">
                     <p className="creator-section__note">New campaigns are saved as pending and become visible to Supporters after Admin approval.</p>
                     <form className="creator-form" onSubmit={submitCampaign}>
-                        <CampaignFields prefix="create" />
+                        <CampaignFields
+                            prefix="create"
+                            campaignImageUrl={campaignImageUrl}
+                            onImageChange={setCampaignImageUrl}
+                        />
                         <div className="creator-form__actions">
                             <button className="creator-button creator-button--primary" disabled={busyId === "campaign-create"} type="submit">
                                 <FiPlus aria-hidden="true" /> {busyId === "campaign-create" ? "Submitting…" : "Add Campaign"}
@@ -466,7 +467,11 @@ export default function CreatorDashboard({ section = "home", user }) {
             {showCampaignForm && (
                 <CreatorModal title="Add New Campaign" onClose={() => setShowCampaignForm(false)}>
                     <form className="creator-form creator-form--modal" onSubmit={submitCampaign}>
-                        <CampaignFields prefix="create" />
+                        <CampaignFields
+                            prefix="create"
+                            campaignImageUrl={campaignImageUrl}
+                            onImageChange={setCampaignImageUrl}
+                        />
                         <button className="creator-button creator-button--primary" disabled={busyId === "campaign-create"} type="submit">{busyId === "campaign-create" ? "Submitting…" : "Add Campaign"}</button>
                     </form>
                 </CreatorModal>

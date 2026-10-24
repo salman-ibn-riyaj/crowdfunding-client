@@ -33,7 +33,7 @@ export const CREDIT_PACKAGES = [
 
 export const supporterApi = {
     getSummary:           ()               => request("/api/supporter/summary"),
-    getContributions:     ()               => request("/api/supporter/contributions"),
+    getContributions:     (page = 1, limit = 10) => request(`/api/supporter/contributions?page=${page}&limit=${limit}`),
     getApprovedContributions: ()           => request("/api/supporter/contributions/approved"),
     getPayments:          ()               => request("/api/supporter/payments"),
     purchaseCredits:      (packageId, paymentMethod) =>

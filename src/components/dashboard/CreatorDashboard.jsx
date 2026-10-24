@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiArchive, FiArrowRight, FiPlus, FiRefreshCw, FiX } from "react-icons/fi";
 import { creatorApi } from "../../lib/creator-api";
+import ImageUpload from "../ImageUpload";
 
 const EMPTY_SUMMARY = {
     totalCampaigns: 0,
@@ -112,10 +113,16 @@ function CampaignFields({ campaign = {}, prefix }) {
                         <span>Reward information</span>
                         <textarea defaultValue="" maxLength={2000} minLength={2} name="rewardInfo" required rows={3} />
                     </label>
-                    <label className="creator-field creator-field--wide">
-                        <span>Campaign image URL</span>
-                        <input defaultValue="" name="imageUrl" placeholder="https://example.com/campaign.jpg" required type="url" />
-                    </label>
+                    <ImageUpload
+                        label="Campaign image"
+                        value={campaignImageUrl}
+                        onChange={(url) => {
+                            setCampaignImageUrl(url);
+                            const input = document.querySelector('input[name="imageUrl"]');
+                            if (input) input.value = url;
+                        }}
+                    />
+                    <input name="imageUrl" type="hidden" value={campaignImageUrl} />
                 </>
             )}
             {prefix === "edit" && (
@@ -144,6 +151,7 @@ export default function CreatorDashboard({ section = "home", user }) {
     const [withdrawCredits, setWithdrawCredits] = useState("");
     const [paymentSystem, setPaymentSystem] = useState("Stripe");
     const [accountNumber, setAccountNumber] = useState("");
+    const [campaignImageUrl, setCampaignImageUrl] = useState("");
 
     async function loadDashboard(showSpinner = false) {
         if (showSpinner) setRefreshing(true);

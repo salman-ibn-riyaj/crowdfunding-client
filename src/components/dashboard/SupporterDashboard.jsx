@@ -49,6 +49,7 @@ function StatusBadge({ status }) {
 export default function SupporterDashboard({ section = "home", user }) {
     const [summary, setSummary] = useState(EMPTY_SUMMARY);
     const [contributions, setContributions] = useState([]);
+    const [pagination, setPagination] = useState({ page: 1, totalPages: 1, total: 0 });
     const [approved, setApproved] = useState([]);
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -64,12 +65,13 @@ export default function SupporterDashboard({ section = "home", user }) {
         try {
             const [summaryRes, contribRes, approvedRes, paymentsRes] = await Promise.all([
                 supporterApi.getSummary(),
-                supporterApi.getContributions(),
+                supporterApi.getContributions(pagination.page, 10),
                 supporterApi.getApprovedContributions(),
                 supporterApi.getPayments(),
             ]);
             setSummary(summaryRes.summary || EMPTY_SUMMARY);
             setContributions(contribRes.contributions || []);
+            setPagination(contribRes.pagination || { page: 1, totalPages: 1, total: 0 });
             setApproved(approvedRes.contributions || []);
             setPayments(paymentsRes.payments || []);
         } catch (err) {
@@ -80,17 +82,23 @@ export default function SupporterDashboard({ section = "home", user }) {
         }
     }
 
+    function changePage(newPage) {
+        if (newPage < 1 || newPage > pagination.totalPages) return;
+        setPagination({ ...pagination, page: newPage });
+    }
+
     useEffect(() => {
         let active = true;
         Promise.all([
             supporterApi.getSummary(),
-            supporterApi.getContributions(),
+            supporterApi.getContributions(1, 10),
             supporterApi.getApprovedContributions(),
             supporterApi.getPayments(),
         ]).then(([summaryRes, contribRes, approvedRes, paymentsRes]) => {
             if (!active) return;
             setSummary(summaryRes.summary || EMPTY_SUMMARY);
             setContributions(contribRes.contributions || []);
+            setPagination(contribRes.pagination || { page: 1, totalPages: 1, total: 0 });
             setApproved(approvedRes.contributions || []);
             setPayments(paymentsRes.payments || []);
         }).catch((err) => {
@@ -100,6 +108,13 @@ export default function SupporterDashboard({ section = "home", user }) {
         });
         return () => { active = false; };
     }, []);
+
+    // Reload contributions when page changes
+    useEffect(() => {
+        if (section === "contributions" && !loading) {
+            loadDashboard();
+        }
+    }, [pagination.page]);
 
     async function buyPackage(pkg) {
         if (busyId) return;
@@ -279,6 +294,50 @@ export default function SupporterDashboard({ section = "home", user }) {
                             </tbody>
                         </table>
                     </div>
+                    {pagination.totalPages > 1 && (
+                        <div className="pagination-controls">
+                            <button
+                                className="pagination-button"
+                                disabled={!pagination.hasPrev}
+                                onClick={() => changePage(pagination.page - 1)}
+                                type="button"
+                            >
+                                Previous
+                            </button>
+                            <div className="pagination-numbers">
+                                {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
+                                    let pageNum;
+                                    if (pagination.totalPages <= 5) {
+                                        pageNum = i + 1;
+                                    } else if (pagination.page <= 3) {
+                                        pageNum = i + 1;
+                                    } else if (pagination.page >= pagination.totalPages - 2) {
+                                        pageNum = pagination.totalPages - 4 + i;
+                                    } else {
+                                        pageNum = pagination.page - 2 + i;
+                                    }
+                                    return (
+                                        <button
+                                            key={pageNum}
+                                            className={`pagination-number${pagination.page === pageNum ? " pagination-number--active" : ""}`}
+                                            onClick={() => changePage(pageNum)}
+                                            type="button"
+                                        >
+                                            {pageNum}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            <button
+                                className="pagination-button"
+                                disabled={!pagination.hasNext}
+                                onClick={() => changePage(pagination.page + 1)}
+                                type="button"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    )}
                 </section>
             )}
 

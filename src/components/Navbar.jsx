@@ -11,6 +11,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import { authClient } from "../lib/auth-client";
+import NotificationPopup from "./NotificationPopup";
 
 const THEME_STORAGE_KEY = "crowdfunding-theme";
 const DEVELOPER_REPOSITORY = "https://github.com/salman-ibn-riyaj/crowdfunding-client";
@@ -55,9 +56,9 @@ export default function Navbar({ user = null, availableCredits = null, onLogout 
   const navItems = accountUser
     ? [{ href: "/dashboard", label: "Dashboard" }]
     : [
-        { href: "/campaigns", label: "Explore Campaigns" },
-        { href: "/login", label: "Login" },
-      ];
+      { href: "/campaigns", label: "Explore Campaigns" },
+      { href: "/login", label: "Login" },
+    ];
 
   return (
     <header className="site-header">
@@ -124,6 +125,7 @@ export default function Navbar({ user = null, availableCredits = null, onLogout 
             <span>Join as Developer</span>
             <FiArrowUpRight aria-hidden="true" />
           </a>
+          {accountUser && <NotificationPopup user={accountUser} />}
           <button
             aria-label="Switch between light and dark themes"
             className="navbar__icon-button"

@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { FiBell, FiLogOut } from "react-icons/fi";
 import { authClient } from "../../lib/auth-client";
 import { completeRoleOnboarding } from "../../lib/account-api";
+import CreatorDashboard from "./CreatorDashboard";
 
 const ROLE_NAVIGATION = {
   supporter: [
@@ -155,12 +156,22 @@ export default function DashboardShell() {
             </Link>
           ))}
         </nav>
-        <section aria-labelledby="dashboard-section-title" className="dashboard-content">
-          <p className="section-eyebrow">{role} workspace</p>
-          <h2 id="dashboard-section-title">{activeItem.label}</h2>
-          <p>
-            Your {activeItem.label.toLowerCase()} area is ready for its detailed workflow. This shell is connected to your account and role; the section features will follow your dashboard specifications.
-          </p>
+        <section
+          aria-label={role === "creator" ? "Creator dashboard workspace" : undefined}
+          aria-labelledby={role === "creator" ? undefined : "dashboard-section-title"}
+          className="dashboard-content"
+        >
+          {role === "creator" ? (
+            <CreatorDashboard section={sectionKey} user={user} />
+          ) : (
+            <>
+              <p className="section-eyebrow">{role} workspace</p>
+              <h2 id="dashboard-section-title">{activeItem.label}</h2>
+              <p>
+                Your {activeItem.label.toLowerCase()} area is ready for its detailed workflow. This shell is connected to your account and role; the section features will follow your dashboard specifications.
+              </p>
+            </>
+          )}
         </section>
       </div>
     </main>

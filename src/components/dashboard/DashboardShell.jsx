@@ -9,6 +9,7 @@ import { authClient } from "../../lib/auth-client";
 import { completeRoleOnboarding } from "../../lib/account-api";
 import CreatorDashboard from "./CreatorDashboard";
 import SupporterDashboard from "./SupporterDashboard";
+import AdminDashboard from "./AdminDashboard";
 
 const ROLE_NAVIGATION = {
     supporter: [
@@ -28,8 +29,9 @@ const ROLE_NAVIGATION = {
     ],
     admin: [
         { key: "home", label: "Home" },
-        { key: "users", label: "Manage Users" },
+        { key: "approvals", label: "Campaign Approvals" },
         { key: "campaigns", label: "Manage Campaigns" },
+        { key: "users", label: "Manage Users" },
         { key: "withdrawals", label: "Withdrawal Requests" },
         { key: "reports", label: "Reports" },
     ],
@@ -159,14 +161,16 @@ export default function DashboardShell() {
                     ))}
                 </nav>
                 <section
-                    aria-label={role === "creator" ? "Creator dashboard workspace" : role === "supporter" ? "Supporter dashboard workspace" : undefined}
-                    aria-labelledby={role === "creator" || role === "supporter" ? undefined : "dashboard-section-title"}
+                    aria-label={role === "creator" ? "Creator dashboard workspace" : role === "supporter" ? "Supporter dashboard workspace" : role === "admin" ? "Admin dashboard workspace" : undefined}
+                    aria-labelledby={["creator", "supporter", "admin"].includes(role) ? undefined : "dashboard-section-title"}
                     className="dashboard-content"
                 >
                     {role === "creator" ? (
                         <CreatorDashboard section={sectionKey} user={user} />
                     ) : role === "supporter" ? (
                         <SupporterDashboard section={sectionKey} user={user} />
+                    ) : role === "admin" ? (
+                        <AdminDashboard section={sectionKey} user={user} />
                     ) : (
                         <>
                             <p className="section-eyebrow">{role} workspace</p>

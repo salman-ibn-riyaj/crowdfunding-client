@@ -3362,3 +3362,248 @@ button {
     gap: 24px;
   }
 }
+
+/* ============================================================
+   ADMIN DASHBOARD
+   ============================================================ */
+
+.admin-workspace {
+  display: grid;
+  width: 100%;
+  gap: 26px;
+}
+
+.admin-workspace__heading,
+.admin-workspace__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.admin-workspace__heading {
+  margin-bottom: 2px;
+}
+
+.admin-workspace__heading .section-eyebrow {
+  margin-bottom: 6px;
+}
+
+.admin-workspace__heading h2 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: 1.65rem;
+  font-weight: 680;
+}
+
+.admin-workspace__actions {
+  flex: 0 0 auto;
+}
+
+.admin-user-label {
+  max-width: 180px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Stats grid ─────────────────────────────────────────────── */
+
+.admin-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.admin-stat {
+  display: grid;
+  min-height: 126px;
+  align-content: center;
+  gap: 7px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.admin-stat p,
+.admin-stat small {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.admin-stat strong {
+  color: var(--foreground);
+  font-size: 1.5rem;
+  font-weight: 720;
+}
+
+.admin-stat--accent {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}
+
+.admin-stat--accent strong {
+  color: var(--accent);
+}
+
+/* ── Section ────────────────────────────────────────────────── */
+
+.admin-section {
+  display: grid;
+  align-content: start;
+  gap: 19px;
+  min-width: 0;
+}
+
+/* ── Table extensions ───────────────────────────────────────── */
+
+.admin-table {
+  min-width: 820px;
+}
+
+.admin-campaign-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 180px;
+}
+
+.admin-campaign-cell img {
+  flex: 0 0 auto;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.admin-campaign-cell div {
+  display: grid;
+  gap: 3px;
+}
+
+.admin-campaign-cell strong {
+  max-width: 200px;
+  overflow: hidden;
+  color: var(--foreground);
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-campaign-cell small {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+/* ── User cell ──────────────────────────────────────────────── */
+
+.admin-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 140px;
+}
+
+.admin-avatar {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-raised);
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+
+.admin-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-email-cell {
+  color: var(--muted);
+  font-size: 0.78rem;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Role dropdown ──────────────────────────────────────────── */
+
+.admin-role-select {
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--background);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.admin-role-select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Reports ────────────────────────────────────────────────── */
+
+.admin-reason-cell {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.admin-resolved-label {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-style: italic;
+}
+
+/* ── Warn button (suspend) ──────────────────────────────────── */
+
+.admin-button--warn {
+  border-color: color-mix(in srgb, #b57a00 28%, var(--border));
+  color: #8a5c00;
+}
+
+[data-theme="dark"] .admin-button--warn {
+  color: #f2b44d;
+}
+
+/* ── Loading ────────────────────────────────────────────────── */
+
+.admin-loading {
+  padding: 50px 0;
+  color: var(--muted);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .admin-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-workspace__heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 440px) {
+  .admin-stat-grid {
+    grid-template-columns: 1fr;
+  }
+}

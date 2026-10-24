@@ -10,6 +10,7 @@ import {
   FiSun,
   FiX,
 } from "react-icons/fi";
+import { authClient } from "../lib/auth-client";
 
 const THEME_STORAGE_KEY = "crowdfunding-theme";
 const DEVELOPER_REPOSITORY = "https://github.com/salman-ibn-riyaj/crowdfunding-client";
@@ -20,6 +21,9 @@ function readTheme() {
 
 export default function Navbar({ user = null, availableCredits = null, onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { data: session } = authClient.useSession();
+  const accountUser = user || session?.user || null;
+  const accountCredits = availableCredits ?? accountUser?.credits;
 
   useEffect(() => {
     const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
@@ -48,7 +52,7 @@ export default function Navbar({ user = null, availableCredits = null, onLogout 
     }
   }
 
-  const navItems = user
+  const navItems = accountUser
     ? [{ href: "/dashboard", label: "Dashboard" }]
     : [
         { href: "/campaigns", label: "Explore Campaigns" },
@@ -79,27 +83,26 @@ export default function Navbar({ user = null, availableCredits = null, onLogout 
                 </Link>
               </li>
             ))}
-            {!user && (
+            {!accountUser && (
               <li>
                 <Link className="navbar__link" href="/register">
                   Register
                 </Link>
               </li>
             )}
-            {user && (
+            {accountUser && (
               <li className="navbar__account">
                 <span className="navbar__credits">
                   Available credits
-                  <strong>{availableCredits ?? "—"}</strong>
+                  <strong>{accountCredits ?? "—"}</strong>
                 </span>
-                <Link className="navbar__profile" href={user.profileHref || "/dashboard"}>
-                  {user.name || user.email || "Profile"}
+                <Link className="navbar__profile" href={accountUser.profileHref || "/dashboard"}>
+                  {accountUser.name || accountUser.email || "Profile"}
                 </Link>
                 <button
                   className="navbar__logout"
-                  disabled={!onLogout}
-                  onClick={onLogout}
-                  title={onLogout ? "Log out" : "Connect logout handling to enable"}
+                  onClick={onLogout || (() => authClient.signOut())}
+                  title="Log out"
                   type="button"
                 >
                   <FiLogOut aria-hidden="true" />

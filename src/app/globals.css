@@ -552,6 +552,7 @@ button {
 }
 
 @media (max-width: 480px) {
+
   .navbar,
   .home-page,
   .placeholder-page {
@@ -593,6 +594,7 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -606,6 +608,33 @@ button {
 .homepage {
   flex: 1;
   overflow: hidden;
+}
+
+.swiper {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.swiper-wrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  box-sizing: content-box;
+  transition-property: transform;
+}
+
+.swiper-slide {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.swiper-horizontal {
+  touch-action: pan-y;
 }
 
 .hero-slider {
@@ -927,8 +956,8 @@ button {
 }
 
 .step-item p,
-.categories-section__copy > p:not(.section-eyebrow),
-.creator-callout > div > p:not(.section-eyebrow) {
+.categories-section__copy>p:not(.section-eyebrow),
+.creator-callout>div>p:not(.section-eyebrow) {
   max-width: 360px;
   margin: 0;
   color: var(--muted);
@@ -949,7 +978,7 @@ button {
   font-size: 2.8rem;
 }
 
-.categories-section__copy > p:not(.section-eyebrow) {
+.categories-section__copy>p:not(.section-eyebrow) {
   margin-top: 16px;
 }
 
@@ -1056,6 +1085,12 @@ button {
   background: var(--surface);
 }
 
+.testimonial-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
 .testimonial-card__quote-mark {
   width: 24px;
   height: 24px;
@@ -1119,7 +1154,7 @@ button {
   font-size: 2.45rem;
 }
 
-.creator-callout > div > p:not(.section-eyebrow) {
+.creator-callout>div>p:not(.section-eyebrow) {
   margin-top: 12px;
 }
 
@@ -1221,18 +1256,37 @@ button {
 }
 
 @keyframes home-section-enter {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes hero-copy-enter {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes hero-image-enter {
-  from { transform: scale(1.035); }
-  to { transform: scale(1); }
+  from {
+    transform: scale(1.035);
+  }
+
+  to {
+    transform: scale(1);
+  }
 }
 
 @media (max-width: 900px) {
@@ -1242,6 +1296,10 @@ button {
   }
 
   .campaign-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .testimonial-preview-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1256,6 +1314,7 @@ button {
 }
 
 @media (max-width: 640px) {
+
   .hero-slider__swiper,
   .hero-slide {
     min-height: 610px;
@@ -1392,6 +1451,11 @@ button {
     padding: 20px;
   }
 
+  .testimonial-preview-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
   .creator-callout {
     width: min(100% - 36px, 1200px);
     align-items: flex-start;
@@ -1433,6 +1497,7 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .hero-slide__image,
   .hero-slide__content,
   .home-reveal {

@@ -11,15 +11,45 @@ export default function HeroSlider({ slides }) {
   const [swiper, setSwiper] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(true);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const updatePreference = (event) => setReducedMotion(event.matches);
 
     updatePreference(preference);
+    setIsReady(true);
     preference.addEventListener("change", updatePreference);
     return () => preference.removeEventListener("change", updatePreference);
   }, []);
+
+  if (!isReady) {
+    const firstSlide = slides[0];
+
+    return (
+      <section aria-label="Featured campaign stories" className="hero-slider">
+        <article className="hero-slide">
+          <Image
+            alt={firstSlide.imageAlt}
+            className="hero-slide__image"
+            fill
+            priority
+            sizes="100vw"
+            src={firstSlide.image}
+          />
+          <div className="hero-slide__shade" />
+          <div className="hero-slide__content">
+            <p className="hero-slide__label">{firstSlide.label}</p>
+            <h1 className="hero-slide__title">{firstSlide.title}</h1>
+            <p className="hero-slide__description">{firstSlide.description}</p>
+            <Link className="hero-slide__cta" href="/campaigns">
+              Explore campaigns <FiArrowRight aria-hidden="true" />
+            </Link>
+          </div>
+        </article>
+      </section>
+    );
+  }
 
   return (
     <section aria-label="Featured campaign stories" className="hero-slider">
